@@ -1,0 +1,25 @@
+meta {
+  name: words
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/words
+  body: json
+  auth: basic
+}
+
+auth:basic {
+  username: user
+  password: password
+}
+
+body:json {
+  {
+      "english": "aaa",
+      "kana": "bbb",
+      "kanji": "ccc",
+      "isKatakana": true
+  }
+}

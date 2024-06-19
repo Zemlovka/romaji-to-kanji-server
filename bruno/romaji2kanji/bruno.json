@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "romaji2kanji",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
