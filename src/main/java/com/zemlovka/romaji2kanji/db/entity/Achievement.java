@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 public class Achievement {
     @Id
-    @GeneratedValue()
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
 

@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 public class Sentence {
     @Id
-    @GeneratedValue()
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
 

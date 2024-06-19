@@ -21,7 +21,7 @@ import java.util.List;
 public class User implements UserDetails {
     private static final String ROLE_DELIMITER = "|";
     @Id
-    @GeneratedValue()
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
 

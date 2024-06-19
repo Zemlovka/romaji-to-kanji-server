@@ -34,7 +34,6 @@ public class AppConfig {
     public void populateWords() {
         if (wordService.getRandomWords(true,true, 1).size() == 0)
             wordService.insertWords(WordSupplier.getWordsPool());
-        System.out.println(wordService.getRandomWords(true, true, 10));
     }
 
 //    @Bean
