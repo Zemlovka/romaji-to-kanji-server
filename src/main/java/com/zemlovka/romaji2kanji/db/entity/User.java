@@ -1,13 +1,15 @@
-package com.zemlovka.romaji2kanji.db.entitie;
+package com.zemlovka.romaji2kanji.db.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 public class User implements UserDetails {
+    private static final String ROLE_DELIMITER = "|";
     @Id
     @GeneratedValue()
     @Column(nullable = false)
@@ -26,10 +29,13 @@ public class User implements UserDetails {
     private String username;
 
     @Column(nullable = false)
-    private String role;
+    private String roles;
 
     @Column(nullable = false)
     private Instant registeredAt;
+
+    @Column(nullable = false)
+    private String password;
 
     @Column
     private Instant updatedAt;
@@ -54,16 +60,24 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Arrays.stream(roles.split("\\" + ROLE_DELIMITER)).map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public List<String> getRoles() {
+        return Arrays.stream(roles.split("\\" + ROLE_DELIMITER)).toList();
+    }
+
+    public void setRoles(String... roles) {
+        this.roles = String.join(ROLE_DELIMITER, roles);
     }
 }

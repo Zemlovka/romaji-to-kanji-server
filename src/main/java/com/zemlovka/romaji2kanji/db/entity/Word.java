@@ -1,4 +1,4 @@
-package com.zemlovka.romaji2kanji.db.entitie;
+package com.zemlovka.romaji2kanji.db.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class Word {
     private String kanji;
 
     @Column(nullable = false)
-    private boolean isKatakana;
+    private Boolean isKatakana;
 
     @ManyToOne
     @JoinColumn

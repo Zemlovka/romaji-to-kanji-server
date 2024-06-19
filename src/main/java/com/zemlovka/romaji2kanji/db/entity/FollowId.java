@@ -1,4 +1,4 @@
-package com.zemlovka.romaji2kanji.db.entitie;
+package com.zemlovka.romaji2kanji.db.entity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

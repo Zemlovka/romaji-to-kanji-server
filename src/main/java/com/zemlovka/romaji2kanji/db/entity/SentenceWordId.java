@@ -1,4 +1,4 @@
-package com.zemlovka.romaji2kanji.db.entitie;
+package com.zemlovka.romaji2kanji.db.entity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,9 +9,9 @@ import java.io.Serializable;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class WordProgressId implements Serializable {
+public class SentenceWordId implements Serializable {
 
     private Integer word;
-    private Integer user;
-    private Integer tries;
+    private Integer sentence;
+    private Integer wordOrder;
 }
