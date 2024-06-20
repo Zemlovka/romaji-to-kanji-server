@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 
+@CrossOrigin
 @RestController
 public class Controller {
     private final static Integer DEFAULT_SENT_WORDS_NUMBER = 10;
