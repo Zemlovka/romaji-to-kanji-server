@@ -1,0 +1,20 @@
+meta {
+  name: words
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/words
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "english": "aaa",
+      "kana": "bbb",
+      "kanji": "ccc",
+      "isKatakana": true
+  }
+}

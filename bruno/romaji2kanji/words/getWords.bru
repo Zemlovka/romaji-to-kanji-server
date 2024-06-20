@@ -1,0 +1,17 @@
+meta {
+  name: getWords
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host}}/words/words?n=10&k=true&h=true
+  body: none
+  auth: inherit
+}
+
+params:query {
+  n: 10
+  k: true
+  h: true
+}
