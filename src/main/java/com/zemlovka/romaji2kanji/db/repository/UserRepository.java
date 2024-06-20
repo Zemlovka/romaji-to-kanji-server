@@ -12,7 +12,13 @@ import java.util.function.Function;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findUserByUsername(String username);
+    User findUserByPassword(String hash);
     boolean existsByUsername(String username);
+
+    /**
+     * Deletes user, returns if successful
+     */
+    boolean deleteByUsername(String username);
 
     @Query("select u from User u")
     List<User> getAll();

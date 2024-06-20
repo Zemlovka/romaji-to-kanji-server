@@ -51,13 +51,14 @@ public class SecurityConfig {
             user.setPassword(passwordEncoder().encode("password"));
             user.setRoles("USER");
             user.setRegisteredAt(Instant.now());
-            userService.saveUser(user);
+            userService.createUser(user);
         }
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(htpSecurity -> htpSecurity.disable());
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.cors(AbstractHttpConfigurer::disable);
 
 //        http.securityMatcher("/admin-page","/index","/contact","/register*")
         http.securityMatcher("/*")
