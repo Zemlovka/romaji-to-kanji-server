@@ -58,7 +58,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
-        http.cors(AbstractHttpConfigurer::disable);
+        http.cors(withDefaults());
 
 //        http.securityMatcher("/admin-page","/index","/contact","/register*")
         http.securityMatcher("/*")
