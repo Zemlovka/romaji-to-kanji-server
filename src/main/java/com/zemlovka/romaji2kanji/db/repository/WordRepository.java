@@ -19,4 +19,7 @@ public interface WordRepository extends CrudRepository<Word, Integer> {
 
     @Query("select w from Word w where w.id >= ?1")
     List<Word> findAllWordsByIdFrom(int lowerBound, Limit limit);
+
+    @Query("select w from Word w")
+    List<Word> getAll();
 }

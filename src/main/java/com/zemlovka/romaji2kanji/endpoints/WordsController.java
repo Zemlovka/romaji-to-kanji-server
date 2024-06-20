@@ -29,10 +29,16 @@ public class WordsController {
         this.userService = userService;
     }
 
+    @GetMapping(path="/words/all", produces = "application/json")
+    public ResponseEntity<List<WordDTO>> getWord(){
+        return ResponseEntity.ok(Mapper.mapWord(wordService.getAllWords()));
+    }
+
     @GetMapping(path="/words/{id}", produces = "application/json")
     public ResponseEntity<WordDTO> getWord(@PathVariable int id){
-        return null;
+        return ResponseEntity.ok(Mapper.mapWord(wordService.getWord(id).get()));
     }
+
 
     @GetMapping(path="/words", produces = "application/json")
     public ResponseEntity<List<WordDTO>> getWords(@RequestParam(name = "n") Integer wordNumber,

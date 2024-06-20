@@ -23,6 +23,11 @@ public class WordService {
         this.wordRepository = wordRepository;
         this.wordProgressRepository = wordProgressRepository;
     }
+
+    public List<Word> getAllWords() {
+        return wordRepository.getAll();
+    }
+
     public List<Word> getRandomWords(boolean isKatakana, boolean isHiragana, int number) {
         assert isKatakana || isHiragana;
         long qty = wordRepository.count() - number;
@@ -52,12 +57,14 @@ public class WordService {
     }
     public void insertWordProgress(WordProgress wordProgress) {
         List<WordProgress> wordProgressList = wordProgressRepository.findWordProgressByUserAndAndWord(wordProgress.getUser(), wordProgress.getWord());
-        Integer maxTry = Collections.max(wordProgressList.stream().map(WordProgress::getTries).toList());
-        if (maxTry == null)
-            maxTry = 1;
+        int maxTry;
+        if (wordProgressList.size() > 0)
+            maxTry = Collections.max(wordProgressList.stream().map(WordProgress::getTries).toList()) + 1;
         else
-            maxTry++;
+            maxTry = 1;
         wordProgress.setTries(maxTry);
+        wordProgress.setCreatedAt(Instant.now());
+        wordProgress.setUpdatedAt(Instant.now());
         wordProgressRepository.save(wordProgress);
     }
 }
