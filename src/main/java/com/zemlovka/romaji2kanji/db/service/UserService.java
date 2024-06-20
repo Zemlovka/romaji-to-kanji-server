@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -52,14 +51,14 @@ public class UserService {
         User userEntity = new User();
         userEntity.setUsername(user.getUsername());
         userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
-        userEntity.setRole(Role.USER);
+        userEntity.setRole(Role.ROLE_USER);
         userEntity.setRegisteredAt(Instant.now());
         userRepository.save(userEntity);
     }
 
     public User createUser(User user) {
         if (user.getAuthorities() == null || user.getAuthorities().isEmpty())
-            user.setRole(Role.USER);
+            user.setRole(Role.ROLE_USER);
         if (user.getRegisteredAt() == null)
             user.setRegisteredAt(Instant.now());
         user.setUpdatedAt(Instant.now());
@@ -72,7 +71,7 @@ public class UserService {
         userEntity.setUsername(user.getUsername());
         userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         //todo
-        userEntity.setRole(Role.USER);
+        userEntity.setRole(Role.ROLE_USER);
         userEntity.setUpdatedAt(Instant.now());
         userRepository.save(userEntity);
     }

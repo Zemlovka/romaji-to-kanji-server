@@ -19,7 +19,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import java.time.Instant;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -46,7 +45,7 @@ public class SecurityConfig {
             User user = new User();
             user.setUsername("user");
             user.setPassword("password");
-            user.setRole(Role.USER);
+            user.setRole(Role.ROLE_USER);
             user.setRegisteredAt(Instant.now());
             userService.createUser(user);
         }
@@ -54,7 +53,7 @@ public class SecurityConfig {
             User admin = new User();
             admin.setUsername("admin");
             admin.setPassword("password");
-            admin.setRole(Role.ADMIN);
+            admin.setRole(Role.ROLE_ADMIN);
             admin.setRegisteredAt(Instant.now());
             userService.createUser(admin);
         }
@@ -62,14 +61,14 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http.csrf(AbstractHttpConfigurer::disable);
         http
         .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
 //        http.securityMatcher("/admin-page","/index","/contact","/register*");
         http.authorizeHttpRequests(
             (authorize) -> authorize
-                .requestMatchers("/users/all").hasRole(Role.ADMIN.name())
+                .requestMatchers("/users/all").hasAnyRole("ADMIN")
 //                                .requestMatchers("/index").hasAnyRole("USER","ADMIN")
 //                                .requestMatchers("/contact").permitAll()
                 .requestMatchers("/users/**").permitAll()
