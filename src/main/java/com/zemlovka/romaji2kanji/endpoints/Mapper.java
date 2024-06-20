@@ -1,6 +1,9 @@
 package com.zemlovka.romaji2kanji.endpoints;
 
+import com.zemlovka.romaji2kanji.db.entity.User;
 import com.zemlovka.romaji2kanji.db.entity.Word;
+import com.zemlovka.romaji2kanji.endpoints.dto.NewUserDTO;
+import com.zemlovka.romaji2kanji.endpoints.dto.UserDTO;
 import com.zemlovka.romaji2kanji.endpoints.dto.WordDTO;
 
 import java.util.List;
@@ -22,5 +25,18 @@ public class Mapper {
         response.setKanji(word.kanji());
         response.setIsKatakana(word.isKatakana());
         return response;
+    }
+
+    public static User mapUser(NewUserDTO user) {
+        User response = new User();
+        response.setUsername(user.username());
+        response.setPassword(user.password());
+        return response;
+    }
+
+    public static UserDTO mapUser(User user) {
+        return new UserDTO(user.getId(), user.getUsername(), user.getRole().name(),
+                user.getUpdatedAt(), user.getCreatedWords(), user.getWordProgresses(), user.getReports(),
+                user.getAchievmentsProgress(), user.getFollowedUsers(), user.getFollowingUsers());
     }
 }

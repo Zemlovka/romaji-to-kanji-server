@@ -1,5 +1,6 @@
 package com.zemlovka.romaji2kanji.security;
 
+import com.zemlovka.romaji2kanji.db.entity.Role;
 import com.zemlovka.romaji2kanji.db.entity.User;
 import com.zemlovka.romaji2kanji.db.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +12,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
-import javax.sql.DataSource;
 
 import java.time.Instant;
 
@@ -49,7 +45,7 @@ public class SecurityConfig {
             User user = new User();
             user.setUsername("user");
             user.setPassword(passwordEncoder().encode("password"));
-            user.setRoles("USER");
+            user.setRole(Role.USER);
             user.setRegisteredAt(Instant.now());
             userService.createUser(user);
         }
@@ -60,15 +56,14 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(withDefaults());
 
-//        http.securityMatcher("/admin-page","/index","/contact","/register*")
-        http.securityMatcher("/*")
-                .authorizeHttpRequests(
-                        (authorize) -> authorize
+//        http.securityMatcher("/admin-page","/index","/contact","/register*");
+        http.authorizeHttpRequests(
+            (authorize) -> authorize
 //                                .requestMatchers("/admin-page").hasRole("ADMIN")
 //                                .requestMatchers("/index").hasAnyRole("USER","ADMIN")
 //                                .requestMatchers("/contact").permitAll()
-//                                .requestMatchers("/register*").permitAll()
-                                .anyRequest().authenticated())
+                .requestMatchers("/users/**").permitAll()
+                .anyRequest().authenticated())
 
                 .httpBasic(httpSec -> httpSec.authenticationEntryPoint(unauthorizedEntrypoint)).userDetailsService(userAuthService);
         return http.build();

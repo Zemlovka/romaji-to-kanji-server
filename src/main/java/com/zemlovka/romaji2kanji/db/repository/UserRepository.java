@@ -11,6 +11,7 @@ import java.util.function.Function;
 
 
 public interface UserRepository extends JpaRepository<User, Integer> {
+    User findUserById(int id);
     User findUserByUsername(String username);
     User findUserByPassword(String hash);
     boolean existsByUsername(String username);

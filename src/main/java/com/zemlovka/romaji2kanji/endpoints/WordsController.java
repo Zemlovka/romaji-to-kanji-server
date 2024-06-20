@@ -11,18 +11,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 
 @CrossOrigin
 @RestController
-public class Controller {
+public class WordsController {
     private final static Integer DEFAULT_SENT_WORDS_NUMBER = 10;
     private WordService wordService;
     private UserService userService;
 
-    public Controller(WordService wordService, UserService userService) {
+    public WordsController(WordService wordService, UserService userService) {
         this.wordService = wordService;
         this.userService = userService;
     }

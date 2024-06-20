@@ -8,10 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 
 @Entity
@@ -19,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 public class User implements UserDetails {
+
     private static final String ROLE_DELIMITER = "|";
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -28,8 +26,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String username;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String roles;
+    private Role role;
 
     @Column(nullable = false)
     private Instant registeredAt;
@@ -60,7 +59,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(roles.split("\\" + ROLE_DELIMITER)).map(SimpleGrantedAuthority::new).toList();
+        if (role == null)
+            return null;
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
@@ -73,11 +74,11 @@ public class User implements UserDetails {
         return username;
     }
 
-    public List<String> getRoles() {
-        return Arrays.stream(roles.split("\\" + ROLE_DELIMITER)).toList();
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(String... roles) {
-        this.roles = String.join(ROLE_DELIMITER, roles);
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
