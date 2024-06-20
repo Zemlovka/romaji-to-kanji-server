@@ -3,10 +3,13 @@ package com.zemlovka.romaji2kanji.endpoints;
 
 import com.zemlovka.romaji2kanji.db.entity.User;
 import com.zemlovka.romaji2kanji.db.entity.Word;
+import com.zemlovka.romaji2kanji.db.entity.WordProgress;
 import com.zemlovka.romaji2kanji.db.service.UserService;
 import com.zemlovka.romaji2kanji.db.service.WordService;
 import com.zemlovka.romaji2kanji.endpoints.dto.GuessDTO;
 import com.zemlovka.romaji2kanji.endpoints.dto.WordDTO;
+import com.zemlovka.romaji2kanji.endpoints.dto.WordProgressDTO;
+import com.zemlovka.romaji2kanji.endpoints.exceptions.WordIdNotPresentExceptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +53,13 @@ public class WordsController {
     }
 
     @PostMapping(path="/guess", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<WordDTO> postWord(@RequestBody GuessDTO guessDTO, Authentication auth) {
-        return null;
+    public ResponseEntity<WordProgressDTO> guess(@RequestBody GuessDTO guessDTO, Authentication auth) {
+        Word word = wordService.getWord(guessDTO.id()).orElseThrow(() -> new WordIdNotPresentExceptions(""));
+        WordProgress wordProgress = new WordProgress();
+        wordProgress.setWord(word);
+        wordProgress.setUser((User) auth.getPrincipal());
+        wordProgress.setSuccessful(guessDTO.successful());
+        wordService.insertWordProgress(wordProgress);
+        return ResponseEntity.ok(Mapper.mapWordProgress(wordProgress));
     }
 }

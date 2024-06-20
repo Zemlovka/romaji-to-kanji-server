@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<String> handleException(UserAlreadyExistsException e) {
+    @ExceptionHandler({UserAlreadyExistsException.class, WordIdNotPresentExceptions.class})
+    public ResponseEntity<String> handleException(RuntimeException e) {
         // log exception
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)

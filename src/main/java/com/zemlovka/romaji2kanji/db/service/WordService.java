@@ -1,6 +1,8 @@
 package com.zemlovka.romaji2kanji.db.service;
 
+import com.zemlovka.romaji2kanji.db.entity.User;
 import com.zemlovka.romaji2kanji.db.entity.Word;
+import com.zemlovka.romaji2kanji.db.entity.WordProgress;
 import com.zemlovka.romaji2kanji.db.repository.WordProgressRepository;
 import com.zemlovka.romaji2kanji.db.repository.WordRepository;
 import org.springframework.data.domain.Limit;
@@ -47,5 +49,15 @@ public class WordService {
 
     public void insertWords(List<Word> words) {
         wordRepository.saveAll(words);
+    }
+    public void insertWordProgress(WordProgress wordProgress) {
+        List<WordProgress> wordProgressList = wordProgressRepository.findWordProgressByUserAndAndWord(wordProgress.getUser(), wordProgress.getWord());
+        Integer maxTry = Collections.max(wordProgressList.stream().map(WordProgress::getTries).toList());
+        if (maxTry == null)
+            maxTry = 1;
+        else
+            maxTry++;
+        wordProgress.setTries(maxTry);
+        wordProgressRepository.save(wordProgress);
     }
 }

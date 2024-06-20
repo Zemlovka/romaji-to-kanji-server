@@ -5,6 +5,7 @@ import com.zemlovka.romaji2kanji.db.service.UserService;
 import com.zemlovka.romaji2kanji.endpoints.dto.NewUserDTO;
 import com.zemlovka.romaji2kanji.endpoints.dto.UserDTO;
 import com.zemlovka.romaji2kanji.endpoints.dto.WordDTO;
+import com.zemlovka.romaji2kanji.endpoints.dto.WordProgressDTO;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.UserAlreadyExistsException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,11 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping(path="/users/all", produces = "application/json")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok().body(Mapper.mapUser(userService.getAllUsers()));
     }
 
     @PostMapping(path="/users/register", produces = "application/json")
@@ -47,5 +53,15 @@ public class UserController {
     @GetMapping(path="/users/words", produces = "application/json")
     public ModelAndView getUserWords(Authentication auth, ModelMap model) {
         return new ModelAndView("forward:/users/" + ((User)auth.getPrincipal()).getUsername()+"/words", model);
+    }
+
+    @GetMapping(path="/users/{username}/solved", produces = "application/json")
+    public ResponseEntity<List<WordProgressDTO>> getSolvedWords(@PathVariable String username) {
+        return ResponseEntity.ok().body(Mapper.mapWordProgress(userService.loadUserByUsername(username).getWordProgresses()));
+    }
+
+    @GetMapping(path="/users/solved", produces = "application/json")
+    public ModelAndView getSolvedWords(Authentication auth, ModelMap model) {
+        return new ModelAndView("forward:/users/" + ((User)auth.getPrincipal()).getUsername()+"/solved", model);
     }
 }

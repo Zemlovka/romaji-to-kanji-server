@@ -45,24 +45,31 @@ public class SecurityConfig {
         if (!userService.userExists("user")) {
             User user = new User();
             user.setUsername("user");
-            user.setPassword(passwordEncoder().encode("password"));
+            user.setPassword("password");
             user.setRole(Role.USER);
             user.setRegisteredAt(Instant.now());
             userService.createUser(user);
+        }
+        if (!userService.userExists("admin")) {
+            User admin = new User();
+            admin.setUsername("admin");
+            admin.setPassword("password");
+            admin.setRole(Role.ADMIN);
+            admin.setRegisteredAt(Instant.now());
+            userService.createUser(admin);
         }
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.cors(withDefaults());
+        http.csrf().disable();
         http
         .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
 //        http.securityMatcher("/admin-page","/index","/contact","/register*");
         http.authorizeHttpRequests(
             (authorize) -> authorize
-//                                .requestMatchers("/admin-page").hasRole("ADMIN")
+                .requestMatchers("/users/all").hasRole(Role.ADMIN.name())
 //                                .requestMatchers("/index").hasAnyRole("USER","ADMIN")
 //                                .requestMatchers("/contact").permitAll()
                 .requestMatchers("/users/**").permitAll()

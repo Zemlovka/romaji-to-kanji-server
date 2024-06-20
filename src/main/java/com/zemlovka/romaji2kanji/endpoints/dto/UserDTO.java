@@ -10,6 +10,7 @@ public record UserDTO(
         Integer id,
         String username,
         String role,
+        Instant registeredAt,
         Instant updatedAt
 ) {
 }

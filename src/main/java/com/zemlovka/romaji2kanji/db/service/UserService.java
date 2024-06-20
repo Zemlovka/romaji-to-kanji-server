@@ -11,10 +11,11 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 
 
 @Service
-public class UserService implements UserDetailsManager {
+public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -25,6 +26,10 @@ public class UserService implements UserDetailsManager {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public List<User> getAllUsers() {
+        return userRepository.getAll();
+    }
+
     public User loadUserById(int id) throws UsernameNotFoundException {
         if (userRepository.existsById(id)) {
             return userRepository.findUserById(id);
@@ -33,7 +38,6 @@ public class UserService implements UserDetailsManager {
         }
     }
 
-    @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         if (userRepository.existsByUsername(username)) {
             return userRepository.findUserByUsername(username);
@@ -42,7 +46,6 @@ public class UserService implements UserDetailsManager {
         }
     }
 
-    @Override
     public void createUser(UserDetails user) {
         if (userExists(user.getUsername()))
             throw new RuntimeException("User already exists");
@@ -64,7 +67,6 @@ public class UserService implements UserDetailsManager {
         return userRepository.save(user);
     }
 
-    @Override
     public void updateUser(UserDetails user) {
         User userEntity = new User();
         userEntity.setUsername(user.getUsername());
@@ -75,19 +77,16 @@ public class UserService implements UserDetailsManager {
         userRepository.save(userEntity);
     }
 
-    @Override
     public void deleteUser(String username) {
         userRepository.deleteByUsername(username);
     }
 
-    @Override
     public void changePassword(String oldPassword, String newPassword) {
         User user = userRepository.findUserByPassword(passwordEncoder.encode(oldPassword));
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
 
-    @Override
     public boolean userExists(String username) {
         return userRepository.existsByUsername(username);
     }
