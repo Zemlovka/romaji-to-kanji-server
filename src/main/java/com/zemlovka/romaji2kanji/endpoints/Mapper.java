@@ -36,7 +36,6 @@ public class Mapper {
 
     public static UserDTO mapUser(User user) {
         return new UserDTO(user.getId(), user.getUsername(), user.getRole().name(),
-                user.getUpdatedAt(), user.getCreatedWords(), user.getWordProgresses(), user.getReports(),
-                user.getAchievmentsProgress(), user.getFollowedUsers(), user.getFollowingUsers());
+                user.getUpdatedAt());
     }
 }

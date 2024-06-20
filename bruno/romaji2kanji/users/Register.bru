@@ -6,6 +6,13 @@ meta {
 
 post {
   url: {{host}}/users/register
-  body: none
+  body: json
   auth: none
+}
+
+body:json {
+  {
+    "username": "user1",
+    "password": "password"
+  }
 }
