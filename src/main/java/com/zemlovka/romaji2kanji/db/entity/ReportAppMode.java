@@ -1,5 +1,6 @@
 package com.zemlovka.romaji2kanji.db.entity;
 
 public enum ReportAppMode {
-    //TODO
+    R2K,
+    K2R
 }

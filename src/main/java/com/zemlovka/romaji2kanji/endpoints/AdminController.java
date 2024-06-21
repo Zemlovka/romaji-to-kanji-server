@@ -1,8 +1,10 @@
 package com.zemlovka.romaji2kanji.endpoints;
 
+import com.zemlovka.romaji2kanji.db.entity.User;
 import com.zemlovka.romaji2kanji.db.entity.Word;
 import com.zemlovka.romaji2kanji.db.service.UserService;
 import com.zemlovka.romaji2kanji.db.service.WordService;
+import com.zemlovka.romaji2kanji.endpoints.dto.UserCompleteDTO;
 import com.zemlovka.romaji2kanji.endpoints.dto.UserDTO;
 import com.zemlovka.romaji2kanji.endpoints.dto.WordDTO;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.WordIdNotPresentExceptions;
@@ -49,5 +51,10 @@ public class AdminController {
             throw new WordIdNotPresentExceptions(e.getMessage());
         }
         return ResponseEntity.ok(Mapper.mapWord(updatedWord));
+    }
+
+    @GetMapping(path = "/users/{username}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<UserCompleteDTO> userCompleteDTOResponseEntity(@PathVariable String username) {
+        return ResponseEntity.ok(Mapper.mapUserComplete(userService.loadUserByUsername(username)));
     }
 }

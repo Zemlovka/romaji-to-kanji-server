@@ -1,8 +1,7 @@
 package com.zemlovka.romaji2kanji.db.service;
 
-import com.zemlovka.romaji2kanji.db.entity.User;
-import com.zemlovka.romaji2kanji.db.entity.Word;
-import com.zemlovka.romaji2kanji.db.entity.WordProgress;
+import com.zemlovka.romaji2kanji.db.entity.*;
+import com.zemlovka.romaji2kanji.db.repository.ReportRepository;
 import com.zemlovka.romaji2kanji.db.repository.WordProgressRepository;
 import com.zemlovka.romaji2kanji.db.repository.WordRepository;
 import org.springframework.data.domain.Limit;
@@ -18,10 +17,12 @@ import java.util.Optional;
 public class WordService {
     private final WordRepository wordRepository;
     private final WordProgressRepository wordProgressRepository;
+    private final ReportRepository reportRepository;
 
-    public WordService(WordRepository wordRepository, WordProgressRepository wordProgressRepository) {
+    public WordService(WordRepository wordRepository, WordProgressRepository wordProgressRepository, ReportRepository reportRepository) {
         this.wordRepository = wordRepository;
         this.wordProgressRepository = wordProgressRepository;
+        this.reportRepository = reportRepository;
     }
 
     public List<Word> getAllWords() {
@@ -83,5 +84,13 @@ public class WordService {
         if (word.getIsKatakana() != null)
             existingWord.setIsKatakana(word.getIsKatakana());
         return wordRepository.save(existingWord);
+    }
+
+    public Report saveReport(Report report, Word word, User user) {
+        report.setReportedWord(word);
+        report.setReportedBy(user);
+        report.setCreatedAt(Instant.now());
+        report.setState(ReportState.NEW);
+        return reportRepository.save(report);
     }
 }

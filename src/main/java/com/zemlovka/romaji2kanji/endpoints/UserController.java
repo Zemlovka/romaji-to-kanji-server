@@ -1,11 +1,9 @@
 package com.zemlovka.romaji2kanji.endpoints;
 
+import com.zemlovka.romaji2kanji.db.entity.Report;
 import com.zemlovka.romaji2kanji.db.entity.User;
 import com.zemlovka.romaji2kanji.db.service.UserService;
-import com.zemlovka.romaji2kanji.endpoints.dto.NewUserDTO;
-import com.zemlovka.romaji2kanji.endpoints.dto.UserDTO;
-import com.zemlovka.romaji2kanji.endpoints.dto.WordDTO;
-import com.zemlovka.romaji2kanji.endpoints.dto.WordProgressDTO;
+import com.zemlovka.romaji2kanji.endpoints.dto.*;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -65,5 +63,15 @@ public class UserController {
     @GetMapping(path="/users/solved", produces = "application/json")
     public ModelAndView getSolvedWords(Authentication auth, ModelMap model) {
         return new ModelAndView("forward:/users/" + ((User)auth.getPrincipal()).getUsername()+"/solved", model);
+    }
+
+    @GetMapping(path="/users/{username}/reports", produces = "application/json")
+    public ResponseEntity<List<ReportDTOOut>> getReports(@PathVariable String username) {
+        return ResponseEntity.ok().body(Mapper.mapReport(userService.loadUserByUsername(username).getReports()));
+    }
+
+    @GetMapping(path="/users/reports", produces = "application/json")
+    public ModelAndView getReports(Authentication auth, ModelMap model) {
+        return new ModelAndView("forward:/users/" + ((User)auth.getPrincipal()).getUsername()+"/reports", model);
     }
 }

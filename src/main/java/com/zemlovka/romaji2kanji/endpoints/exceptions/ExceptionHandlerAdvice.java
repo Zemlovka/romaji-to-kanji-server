@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    @ExceptionHandler({UserAlreadyExistsException.class, WordIdNotPresentExceptions.class})
+    @ExceptionHandler({UserAlreadyExistsException.class, WordIdNotPresentExceptions.class, WordNotFoundException.class})
     public ResponseEntity<String> handleException(RuntimeException e) {
         // log exception
         return ResponseEntity

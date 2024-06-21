@@ -1,12 +1,10 @@
 package com.zemlovka.romaji2kanji.endpoints;
 
+import com.zemlovka.romaji2kanji.db.entity.Report;
 import com.zemlovka.romaji2kanji.db.entity.User;
 import com.zemlovka.romaji2kanji.db.entity.Word;
 import com.zemlovka.romaji2kanji.db.entity.WordProgress;
-import com.zemlovka.romaji2kanji.endpoints.dto.NewUserDTO;
-import com.zemlovka.romaji2kanji.endpoints.dto.UserDTO;
-import com.zemlovka.romaji2kanji.endpoints.dto.WordDTO;
-import com.zemlovka.romaji2kanji.endpoints.dto.WordProgressDTO;
+import com.zemlovka.romaji2kanji.endpoints.dto.*;
 
 import java.util.List;
 
@@ -51,5 +49,39 @@ public class Mapper {
 
     public static List<WordProgressDTO> mapWordProgress(List<WordProgress> wordProgress) {
         return wordProgress.stream().map(Mapper::mapWordProgress).toList();
+    }
+
+    public static ReportDTOOut mapReport(Report report) {
+        return new ReportDTOOut(
+                report.getId(),
+                report.getReportedWord().getId(),
+                report.getReportedWord().getKana(),
+                report.getReportedWord().getEnglish(),
+                report.getAppMode(),
+                report.getCorrectVariant(),
+                report.getNotes(),
+                report.getCreatedAt(),
+                report.getState()
+        );
+    }
+
+    public static List<ReportDTOOut> mapReport(List<Report> reports) {
+        return reports.stream().map(Mapper::mapReport).toList();
+    }
+
+    public static Report mapReport(ReportDTOIn reportDTOIn) {
+        Report report = new Report();
+        report.setReportedWordValue(reportDTOIn.reportedWord());
+        report.setReportedWordRomajiValue(reportDTOIn.inputValue());
+        report.setAppMode(reportDTOIn.appMode());
+        report.setCorrectVariant(reportDTOIn.variant());
+        report.setNotes(report.getNotes());
+        return report;
+    }
+
+    public static UserCompleteDTO mapUserComplete(User user) {
+        return new UserCompleteDTO(user.getId(), user.getUsername(), user.getRole().name(), user.getRegisteredAt(),
+                user.getUpdatedAt(), mapWord(user.getCreatedWords()),
+                mapWordProgress(user.getWordProgresses()), mapReport(user.getReports()));
     }
 }

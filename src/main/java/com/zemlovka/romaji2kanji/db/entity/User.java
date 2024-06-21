@@ -49,7 +49,7 @@ public class User implements UserDetails {
     private List<Report> reports = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<AchievementProgress> achievmentsProgress = new ArrayList<>();
+    private List<AchievementProgress> achievementProgresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "followedUser")
     private List<Follow> followedUsers = new ArrayList<>();

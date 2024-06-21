@@ -27,7 +27,13 @@ public class Report {
     private Word reportedWord;
 
     @Column(nullable = false)
-    private String appMode; //todo enum
+    private String reportedWordValue;
+
+    @Column(nullable = false)
+    private String reportedWordRomajiValue;
+
+    @Column(nullable = false)
+    private ReportAppMode appMode; //todo enum
 
     @Column(nullable = false)
     private String correctVariant;

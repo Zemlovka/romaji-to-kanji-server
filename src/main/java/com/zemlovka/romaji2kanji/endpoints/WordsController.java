@@ -1,15 +1,15 @@
 package com.zemlovka.romaji2kanji.endpoints;
 
 
+import com.zemlovka.romaji2kanji.db.entity.Report;
 import com.zemlovka.romaji2kanji.db.entity.User;
 import com.zemlovka.romaji2kanji.db.entity.Word;
 import com.zemlovka.romaji2kanji.db.entity.WordProgress;
 import com.zemlovka.romaji2kanji.db.service.UserService;
 import com.zemlovka.romaji2kanji.db.service.WordService;
-import com.zemlovka.romaji2kanji.endpoints.dto.GuessDTO;
-import com.zemlovka.romaji2kanji.endpoints.dto.WordDTO;
-import com.zemlovka.romaji2kanji.endpoints.dto.WordProgressDTO;
+import com.zemlovka.romaji2kanji.endpoints.dto.*;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.WordIdNotPresentExceptions;
+import com.zemlovka.romaji2kanji.endpoints.exceptions.WordNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -53,7 +53,7 @@ public class WordsController {
         return ResponseEntity.ok(Mapper.mapWord(wordService.insertWord(word)));
     }
 
-    @PostMapping(path="/word/guess", consumes = "application/json", produces = "application/json")
+    @PostMapping(path="/words/guess", consumes = "application/json", produces = "application/json")
     public ResponseEntity<WordProgressDTO> guess(@RequestBody GuessDTO guessDTO, Authentication auth) {
         Word word = wordService.getWord(guessDTO.id()).orElseThrow(() -> new WordIdNotPresentExceptions(""));
         WordProgress wordProgress = new WordProgress();
@@ -64,6 +64,11 @@ public class WordsController {
         return ResponseEntity.ok(Mapper.mapWordProgress(wordProgress));
     }
 
-//    @PostMapping(path = "/word/report")
-//    public ResponseEntity<>
+    @PostMapping(path = "/words/report", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<ReportDTOOut> reportWord(@RequestBody ReportDTOIn reportDTOIn, Authentication auth) {
+        Word word = wordService.getWord(reportDTOIn.reportedWordId()).orElseThrow(() -> new WordNotFoundException("Word with this id has not been found"));
+        User user = (User) auth.getPrincipal();
+        Report report = wordService.saveReport(Mapper.mapReport(reportDTOIn), word, user);
+        return ResponseEntity.ok().body(Mapper.mapReport(report));
+    }
 }

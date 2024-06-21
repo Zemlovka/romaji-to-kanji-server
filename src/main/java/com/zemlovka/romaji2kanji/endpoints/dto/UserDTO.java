@@ -1,8 +1,7 @@
 package com.zemlovka.romaji2kanji.endpoints.dto;
 
-import com.zemlovka.romaji2kanji.db.entity.*;
-
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 
