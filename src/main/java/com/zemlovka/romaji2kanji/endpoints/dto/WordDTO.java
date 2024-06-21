@@ -5,6 +5,7 @@ public record WordDTO(
         String english,
         String kana,
         String kanji,
-        Boolean isKatakana
+        Boolean isKatakana,
+        String createdBy
         )
 {}
