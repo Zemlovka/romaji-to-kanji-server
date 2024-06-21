@@ -11,7 +11,6 @@ import com.zemlovka.romaji2kanji.endpoints.dto.*;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.WordIdNotPresentExceptions;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.WordNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@PropertySource("classpath:application.properties")
-@CrossOrigin(value = "${romaji2kanji.client.cors.address}", exposedHeaders = {"Access-Control-Allow-Origin"})
+@CrossOrigin(value = "http://localhost:3000", exposedHeaders = {"Access-Control-Allow-Origin"})
 @RestController
 public class WordsController {
     private final static Integer DEFAULT_SENT_WORDS_NUMBER = 10;

@@ -15,8 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@PropertySource("classpath:application.properties")
-@CrossOrigin(value = "${romaji2kanji.client.cors.address}", exposedHeaders = {"Access-Control-Allow-Origin"})
+@CrossOrigin(value = "http://localhost:3000", exposedHeaders = {"Access-Control-Allow-Origin"})
 @RestController
 public class UserController {
 

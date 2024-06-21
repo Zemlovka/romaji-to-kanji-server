@@ -1,23 +1,23 @@
 package com.zemlovka.romaji2kanji.endpoints;
 
+import com.zemlovka.romaji2kanji.db.entity.Report;
 import com.zemlovka.romaji2kanji.db.entity.User;
 import com.zemlovka.romaji2kanji.db.entity.Word;
 import com.zemlovka.romaji2kanji.db.service.UserService;
 import com.zemlovka.romaji2kanji.db.service.WordService;
-import com.zemlovka.romaji2kanji.endpoints.dto.UserCompleteDTO;
-import com.zemlovka.romaji2kanji.endpoints.dto.UserDTO;
-import com.zemlovka.romaji2kanji.endpoints.dto.WordDTO;
+import com.zemlovka.romaji2kanji.endpoints.dto.*;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.WordIdNotPresentExceptions;
+import com.zemlovka.romaji2kanji.endpoints.exceptions.WordNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
-@PropertySource("classpath:application.properties")
-@CrossOrigin(value = "${romaji2kanji.client.cors.address}", exposedHeaders = {"Access-Control-Allow-Origin"})
+@CrossOrigin(value = "http://localhost:3000", exposedHeaders = {"Access-Control-Allow-Origin"})
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -58,5 +58,13 @@ public class AdminController {
     @GetMapping(path = "/users/{username}", produces = "application/json", consumes = "application/json")
     public ResponseEntity<UserCompleteDTO> userCompleteDTOResponseEntity(@PathVariable String username) {
         return ResponseEntity.ok(Mapper.mapUserComplete(userService.loadUserByUsername(username)));
+    }
+
+    @PostMapping(path = "/words/report/edit", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<ReportDTOOut> updateReport(@RequestBody ReportDTOIn reportDTOIn, Authentication auth) {
+        Word word = wordService.getWord(reportDTOIn.reportedWordId()).orElseThrow(() -> new WordNotFoundException("Word with this id has not been found"));
+        User user = (User) auth.getPrincipal();
+        Report report = wordService.saveReport(Mapper.mapReport(reportDTOIn), word, user);
+        return ResponseEntity.ok().body(Mapper.mapReport(report));
     }
 }
