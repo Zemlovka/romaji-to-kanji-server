@@ -39,6 +39,14 @@ public class UserController {
         return ResponseEntity.ok().body(Mapper.mapUser(userService.createUser(user)));
     }
 
+    @PostMapping(path = "/change-password", consumes = "application/json")
+    public ResponseEntity changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        if (changePasswordDTO.oldPassword().equals(changePasswordDTO.newPassword()))
+            return ResponseEntity.badRequest().build();
+        userService.changePassword(changePasswordDTO.oldPassword(), changePasswordDTO.newPassword());
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping(path="/users/{username}", produces = "application/json")
     public ResponseEntity<UserDTO> register(@PathVariable String username) {
         return ResponseEntity.ok().body(Mapper.mapUser(userService.loadUserByUsername(username)));

@@ -30,19 +30,11 @@ public class UserService {
     }
 
     public User loadUserById(int id) throws UsernameNotFoundException {
-        if (userRepository.existsById(id)) {
-            return userRepository.findUserById(id);
-        } else {
-            throw new UsernameNotFoundException("User not found");
-        }
+        return userRepository.findUserById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        if (userRepository.existsByUsername(username)) {
-            return userRepository.findUserByUsername(username);
-        } else {
-            throw new UsernameNotFoundException("User not found");
-        }
+        return userRepository.findUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     public void createUser(UserDetails user) {
@@ -67,17 +59,17 @@ public class UserService {
     }
 
     public void updateUser(UserDetails user) {
-        User userEntity = new User();
-        userEntity.setUsername(user.getUsername());
-        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
-        //todo
-        userEntity.setRole(Role.ROLE_USER);
-        userEntity.setUpdatedAt(Instant.now());
-        userRepository.save(userEntity);
+//        User userEntity = new User();
+//        userEntity.setUsername(user.getUsername());
+//        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
+//        //todo
+//        userEntity.setRole(Role.ROLE_USER);
+//        userEntity.setUpdatedAt(Instant.now());
+//        userRepository.save(userEntity);
     }
 
     public User updateUserRole(String username, Role role) {
-        User user = userRepository.findUserByUsername(username);
+        User user = userRepository.findUserByUsername(username). orElseThrow(() -> new UsernameNotFoundException("User not found"));
         user.setRole(role);
         user.setUpdatedAt(Instant.now());
         userRepository.save(user);
@@ -89,7 +81,7 @@ public class UserService {
     }
 
     public void changePassword(String oldPassword, String newPassword) {
-        User user = userRepository.findUserByPassword(passwordEncoder.encode(oldPassword));
+        User user = userRepository.findUserByPassword(passwordEncoder.encode(oldPassword)). orElseThrow(() -> new UsernameNotFoundException("User not found"));
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }

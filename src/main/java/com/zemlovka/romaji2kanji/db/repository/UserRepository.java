@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.FluentQuery;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 
 public interface UserRepository extends JpaRepository<User, Integer> {
-    User findUserById(int id);
-    User findUserByUsername(String username);
-    User findUserByPassword(String hash);
+    Optional<User> findUserById(int id);
+    Optional<User> findUserByUsername(String username);
+    Optional<User> findUserByPassword(String hash);
     boolean existsByUsername(String username);
 
     /**
