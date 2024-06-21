@@ -90,9 +90,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(List.of("POST", "GET", "PUT"));
-        configuration.setAllowedHeaders(List.of("set-cookie", "cookie"));
+        configuration.setAllowedHeaders(List.of("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "set-cookie", "cookie"));
         configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(List.of("set-cookie", "cookie"));
+        configuration.setExposedHeaders(List.of("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "set-cookie", "cookie"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
