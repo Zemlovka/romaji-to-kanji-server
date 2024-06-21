@@ -9,13 +9,15 @@ import com.zemlovka.romaji2kanji.endpoints.dto.UserDTO;
 import com.zemlovka.romaji2kanji.endpoints.dto.WordDTO;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.WordIdNotPresentExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
-@CrossOrigin
+@PropertySource("classpath:application.properties")
+@CrossOrigin(value = "${romaji2kanji.client.cors.address}", exposedHeaders = {"Access-Control-Allow-Origin"})
 @RestController
 @RequestMapping("/admin")
 public class AdminController {

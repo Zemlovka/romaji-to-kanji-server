@@ -6,6 +6,7 @@ import com.zemlovka.romaji2kanji.db.service.UserService;
 import com.zemlovka.romaji2kanji.endpoints.dto.*;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.ModelMap;
@@ -14,8 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-
-@CrossOrigin
+@PropertySource("classpath:application.properties")
+@CrossOrigin(value = "${romaji2kanji.client.cors.address}", exposedHeaders = {"Access-Control-Allow-Origin"})
 @RestController
 public class UserController {
 
