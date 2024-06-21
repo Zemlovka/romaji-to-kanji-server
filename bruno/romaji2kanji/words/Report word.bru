@@ -1,0 +1,22 @@
+meta {
+  name: Report word
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{host}}/words/report
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "reportedWordId": 2,
+    "reportedWord": "ふぐ",
+    "inputValue": "fugu",
+    "appMode": "k2r",
+    "variant": "",
+    "notes": ""
+  }
+}

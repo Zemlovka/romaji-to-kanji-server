@@ -7,17 +7,12 @@ import com.zemlovka.romaji2kanji.db.service.UserService;
 import com.zemlovka.romaji2kanji.db.service.WordService;
 import com.zemlovka.romaji2kanji.endpoints.dto.*;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.WordIdNotPresentExceptions;
-import com.zemlovka.romaji2kanji.endpoints.exceptions.WordNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-//@CrossOrigin(origins = "http://localhost:3000", exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -42,6 +37,23 @@ public class AdminController {
         return ResponseEntity.ok(Mapper.mapWord(wordService.getAllWords()));
     }
 
+    @GetMapping(path="/reports/all", produces = "application/json")
+    public ResponseEntity<List<ReportDTOOut>> getReports(){
+        return ResponseEntity.ok(Mapper.mapReport(wordService.getAllReports()));
+    }
+
+
+    @GetMapping(path = "/users/{username}", produces = "application/json")
+    public ResponseEntity<UserCompleteDTO> userCompleteDTOResponseEntity(@PathVariable String username) {
+        return ResponseEntity.ok(Mapper.mapUserComplete(userService.loadUserByUsername(username)));
+    }
+
+    @PostMapping(path = "/reports/edit", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<ReportDTOOut> updateReport(@RequestBody ReportEditDTOIn reportDTOIn) {
+        Report report = wordService.updateReport(reportDTOIn.reportId(), reportDTOIn.state(), reportDTOIn.notes());
+        return ResponseEntity.ok().body(Mapper.mapReport(report));
+    }
+
     @PostMapping(path = "/words/edit", produces = "application/json", consumes = "application/json")
     public ResponseEntity<WordDTO> updateWord(@RequestBody WordDTO wordDTO) {
         Word updatedWord;
@@ -55,16 +67,27 @@ public class AdminController {
         return ResponseEntity.ok(Mapper.mapWord(updatedWord));
     }
 
-    @GetMapping(path = "/users/{username}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<UserCompleteDTO> userCompleteDTOResponseEntity(@PathVariable String username) {
-        return ResponseEntity.ok(Mapper.mapUserComplete(userService.loadUserByUsername(username)));
+    @PostMapping(path = "/users/edit", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+        User user = userService.updateUserRole(updateUserDTO.username(), updateUserDTO.role());
+        return ResponseEntity.ok().body(Mapper.mapUser(user));
     }
 
-    @PostMapping(path = "/words/report/edit", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<ReportDTOOut> updateReport(@RequestBody ReportDTOIn reportDTOIn, Authentication auth) {
-        Word word = wordService.getWord(reportDTOIn.reportedWordId()).orElseThrow(() -> new WordNotFoundException("Word with this id has not been found"));
-        User user = (User) auth.getPrincipal();
-        Report report = wordService.saveReport(Mapper.mapReport(reportDTOIn), word, user);
-        return ResponseEntity.ok().body(Mapper.mapReport(report));
+    @DeleteMapping(path = "/reports/delete/{id}", produces = "application/json")
+    public ResponseEntity deleteReport(@PathVariable int id) {
+        wordService.deleteReport(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(path = "/words/delete/{id}", consumes = "application/json")
+    public ResponseEntity deleteWord(@PathVariable int id) {
+        wordService.deleteWord(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(path = "/users/delete/{username}", produces = "application/json")
+    public ResponseEntity deleteUser(@PathVariable String username) {
+        userService.deleteUser(username);
+        return ResponseEntity.ok().build();
     }
 }

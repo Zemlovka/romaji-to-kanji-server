@@ -75,10 +75,11 @@ public class SecurityConfig {
 //        http.securityMatcher("/admin-page","/index","/contact","/register*");
         http.authorizeHttpRequests(
             (authorize) -> authorize
+                .requestMatchers("/users/register").permitAll()
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
 //                                .requestMatchers("/index").hasAnyRole("USER","ADMIN")
 //                                .requestMatchers("/contact").permitAll()
-                .requestMatchers("/users/**").permitAll()
+//                .requestMatchers("/users/**").permitAll()
                 .anyRequest().authenticated())
 
                 .httpBasic(httpSec -> httpSec.authenticationEntryPoint(unauthorizedEntrypoint)).userDetailsService(userAuthService);
@@ -89,7 +90,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-        configuration.setAllowedMethods(List.of("POST", "GET", "PUT"));
+        configuration.setAllowedMethods(List.of("POST", "GET", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "set-cookie", "cookie", "Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
         configuration.setExposedHeaders(List.of("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "set-cookie", "cookie", "Authorization", "Content-Type"));

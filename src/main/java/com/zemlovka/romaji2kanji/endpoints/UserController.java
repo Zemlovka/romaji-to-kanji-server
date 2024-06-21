@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-//@CrossOrigin(value = "http://localhost:3000", exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
 @RestController
 public class UserController {
 
@@ -28,8 +27,8 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<String> login() {
-        return ResponseEntity.ok().body("Login successful");
+    public ResponseEntity<UserDTO> login(Authentication auth) {
+        return ResponseEntity.ok().body(Mapper.mapUser((User) auth.getPrincipal()));
     }
 
     @PostMapping(path="/users/register", produces = "application/json")

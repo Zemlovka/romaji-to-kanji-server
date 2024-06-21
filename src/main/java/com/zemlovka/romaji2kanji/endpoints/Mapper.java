@@ -15,7 +15,7 @@ public class Mapper {
     }
 
     public static WordDTO mapWord(Word word) {
-        return new WordDTO(word.getId(), word.getEnglish(), word.getKana(), word.getKanji(), word.getIsKatakana(), word.getCreatedBy() == null ? "System" : word.getCreatedBy().getUsername());
+        return new WordDTO(word.getId(), word.getEnglish(), word.getKana(), word.getKanji(), word.getIsKatakana(), word.getCreatedBy() == null ? "System" : word.getCreatedBy().getUsername(), word.getCreatedAt(), word.getUpdatedAt());
     }
 
     public static Word mapWord(WordDTO word) {

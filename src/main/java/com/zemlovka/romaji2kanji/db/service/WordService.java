@@ -29,6 +29,10 @@ public class WordService {
         return wordRepository.getAll();
     }
 
+    public List<Report> getAllReports() {
+        return reportRepository.getAll();
+    }
+
     public List<Word> getRandomWords(boolean isKatakana, boolean isHiragana, int number) {
         assert isKatakana || isHiragana;
         long qty = wordRepository.count() - number;
@@ -83,7 +87,12 @@ public class WordService {
             existingWord.setEnglish(word.getEnglish());
         if (word.getIsKatakana() != null)
             existingWord.setIsKatakana(word.getIsKatakana());
+        existingWord.setUpdatedAt(Instant.now());
         return wordRepository.save(existingWord);
+    }
+
+    public void deleteWord(Integer wordId) {
+        wordRepository.deleteById(wordId);
     }
 
     public Report saveReport(Report report, Word word, User user) {
@@ -92,5 +101,18 @@ public class WordService {
         report.setCreatedAt(Instant.now());
         report.setState(ReportState.NEW);
         return reportRepository.save(report);
+    }
+
+    public Report updateReport(Integer reportId, ReportState newReportState, String notes) {
+        Report report = reportRepository.findById(reportId).orElseThrow(() -> new RuntimeException("Report with this id does not exist"));
+        report.setState(newReportState);
+        report.setNotes(notes);
+        report.setResolvedAtAt(Instant.now());
+        reportRepository.save(report);
+        return reportRepository.save(report);
+    }
+
+    public void deleteReport(Integer reportId) {
+        reportRepository.deleteById(reportId);
     }
 }

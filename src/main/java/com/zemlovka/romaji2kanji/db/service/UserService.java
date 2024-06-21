@@ -76,6 +76,14 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
+    public User updateUserRole(String username, Role role) {
+        User user = userRepository.findUserByUsername(username);
+        user.setRole(role);
+        user.setUpdatedAt(Instant.now());
+        userRepository.save(user);
+        return user;
+    }
+
     public void deleteUser(String username) {
         userRepository.deleteByUsername(username);
     }

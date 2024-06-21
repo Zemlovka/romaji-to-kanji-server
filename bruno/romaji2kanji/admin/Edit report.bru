@@ -1,0 +1,19 @@
+meta {
+  name: Edit report
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{host}}/admin/reports/edit
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "reportId": 1,
+    "state": "resolved",
+    "note": "aaaaaa"
+  }
+}

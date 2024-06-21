@@ -16,9 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-
-//@CrossOrigin(value = "http://localhost:3000", exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
 @RestController
 public class WordsController {
     private final static Integer DEFAULT_SENT_WORDS_NUMBER = 10;
