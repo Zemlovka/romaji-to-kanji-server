@@ -70,8 +70,7 @@ public class SecurityConfig {
 //        http.securityMatcher("/admin-page","/index","/contact","/register*");
         http.authorizeHttpRequests(
             (authorize) -> authorize
-                .requestMatchers("/users/all").hasAnyRole("ADMIN")
-                .requestMatchers("/words/all").hasAnyRole("ADMIN")
+                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
 //                                .requestMatchers("/index").hasAnyRole("USER","ADMIN")
 //                                .requestMatchers("/contact").permitAll()
                 .requestMatchers("/users/**").permitAll()

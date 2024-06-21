@@ -36,7 +36,8 @@ public class Report {
     private String notes;
 
     @Column
-    private String state; //todo enum
+    @Enumerated(EnumType.STRING)
+    private ReportState state; //todo enum
 
     @Column(nullable = false)
     private Instant createdAt;

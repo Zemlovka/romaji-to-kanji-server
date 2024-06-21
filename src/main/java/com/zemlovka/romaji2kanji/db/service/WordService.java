@@ -67,4 +67,21 @@ public class WordService {
         wordProgress.setUpdatedAt(Instant.now());
         wordProgressRepository.save(wordProgress);
     }
+
+    public Word updateWord(Word word) {
+        if (!wordRepository.existsById(word.getId()))
+            throw new IllegalArgumentException("Trying to edit word that does not exist");
+        Word existingWord = wordRepository.findById(word.getId()).orElseThrow(
+                () -> new IllegalArgumentException("Trying to edit word that does not exist"));
+        existingWord.setUpdatedAt(Instant.now());
+        if (word.getKana() != null)
+            existingWord.setKana(word.getKana());
+        if (word.getKanji() != null)
+            existingWord.setKanji(word.getKanji());
+        if (word.getEnglish() != null)
+            existingWord.setEnglish(word.getEnglish());
+        if (word.getIsKatakana() != null)
+            existingWord.setIsKatakana(word.getIsKatakana());
+        return wordRepository.save(existingWord);
+    }
 }

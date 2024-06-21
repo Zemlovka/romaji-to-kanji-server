@@ -10,6 +10,7 @@ import com.zemlovka.romaji2kanji.endpoints.dto.GuessDTO;
 import com.zemlovka.romaji2kanji.endpoints.dto.WordDTO;
 import com.zemlovka.romaji2kanji.endpoints.dto.WordProgressDTO;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.WordIdNotPresentExceptions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -21,17 +22,11 @@ import java.util.List;
 @RestController
 public class WordsController {
     private final static Integer DEFAULT_SENT_WORDS_NUMBER = 10;
-    private WordService wordService;
-    private UserService userService;
+    private final WordService wordService;
 
+    @Autowired
     public WordsController(WordService wordService, UserService userService) {
         this.wordService = wordService;
-        this.userService = userService;
-    }
-
-    @GetMapping(path="/words/all", produces = "application/json")
-    public ResponseEntity<List<WordDTO>> getWord(){
-        return ResponseEntity.ok(Mapper.mapWord(wordService.getAllWords()));
     }
 
     @GetMapping(path="/words/{id}", produces = "application/json")
@@ -58,7 +53,7 @@ public class WordsController {
         return ResponseEntity.ok(Mapper.mapWord(wordService.insertWord(word)));
     }
 
-    @PostMapping(path="/guess", consumes = "application/json", produces = "application/json")
+    @PostMapping(path="/word/guess", consumes = "application/json", produces = "application/json")
     public ResponseEntity<WordProgressDTO> guess(@RequestBody GuessDTO guessDTO, Authentication auth) {
         Word word = wordService.getWord(guessDTO.id()).orElseThrow(() -> new WordIdNotPresentExceptions(""));
         WordProgress wordProgress = new WordProgress();
@@ -68,4 +63,7 @@ public class WordsController {
         wordService.insertWordProgress(wordProgress);
         return ResponseEntity.ok(Mapper.mapWordProgress(wordProgress));
     }
+
+//    @PostMapping(path = "/word/report")
+//    public ResponseEntity<>
 }

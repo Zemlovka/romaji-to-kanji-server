@@ -1,0 +1,18 @@
+meta {
+  name: Guess word
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{host}}/word/guess
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 5,
+    "successful": false
+  }
+}

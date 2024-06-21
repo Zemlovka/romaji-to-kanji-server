@@ -7,6 +7,7 @@ import com.zemlovka.romaji2kanji.endpoints.dto.UserDTO;
 import com.zemlovka.romaji2kanji.endpoints.dto.WordDTO;
 import com.zemlovka.romaji2kanji.endpoints.dto.WordProgressDTO;
 import com.zemlovka.romaji2kanji.endpoints.exceptions.UserAlreadyExistsException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.ModelMap;
@@ -21,15 +22,16 @@ import java.util.List;
 public class UserController {
 
 
-    private UserService userService;
+    private final UserService userService;
 
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping(path="/users/all", produces = "application/json")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        return ResponseEntity.ok().body(Mapper.mapUser(userService.getAllUsers()));
+    @GetMapping("/login")
+    public ResponseEntity<String> login() {
+        return ResponseEntity.ok().body("Login successful");
     }
 
     @PostMapping(path="/users/register", produces = "application/json")

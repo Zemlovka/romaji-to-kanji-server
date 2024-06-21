@@ -1,4 +1,4 @@
 package com.zemlovka.romaji2kanji.endpoints.dto;
 
-public record ReportDTO() {
+public record ReportDTOOut() {
 }

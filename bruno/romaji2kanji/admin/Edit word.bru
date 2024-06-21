@@ -1,0 +1,21 @@
+meta {
+  name: Edit word
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{host}}/admin/words/edit
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "id": 491,
+      "english": "edited",
+      "kana": "edited",
+      "kanji": "edited",
+      "isKatakana": true
+    }
+}

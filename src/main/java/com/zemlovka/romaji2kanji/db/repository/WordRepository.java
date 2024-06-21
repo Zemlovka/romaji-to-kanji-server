@@ -6,10 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface WordRepository extends CrudRepository<Word, Integer> {
     long count();
+    Optional<Word> findById(int id);
 
     @Query("select w from Word w where w.isKatakana = true and w.id >= ?1")
     List<Word> findKatakanaWordsByIdFrom(int lowerBound, Limit limit);
