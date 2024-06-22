@@ -74,20 +74,20 @@ public class AdminController {
     }
 
     @DeleteMapping(path = "/reports/delete/{id}", produces = "application/json")
-    public ResponseEntity deleteReport(@PathVariable int id) {
+    public ResponseEntity<DummyDTO> deleteReport(@PathVariable int id) {
         wordService.deleteReport(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new DummyDTO("dummy"));
     }
 
-    @DeleteMapping(path = "/words/delete/{id}", consumes = "application/json")
-    public ResponseEntity deleteWord(@PathVariable int id) {
+    @DeleteMapping(path = "/words/delete/{id}", produces = "application/json")
+    public ResponseEntity<DummyDTO> deleteWord(@PathVariable int id) {
         wordService.deleteWord(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new DummyDTO("dummy"));
     }
 
     @DeleteMapping(path = "/users/delete/{username}", produces = "application/json")
-    public ResponseEntity deleteUser(@PathVariable String username) {
+    public ResponseEntity<DummyDTO> deleteUser(@PathVariable String username) {
         userService.deleteUser(username);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new DummyDTO("dummy"));
     }
 }

@@ -40,11 +40,11 @@ public class UserController {
     }
 
     @PostMapping(path = "/change-password", consumes = "application/json")
-    public ResponseEntity changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+    public ResponseEntity<DummyDTO> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
         if (changePasswordDTO.oldPassword().equals(changePasswordDTO.newPassword()))
             return ResponseEntity.badRequest().build();
         userService.changePassword(changePasswordDTO.oldPassword(), changePasswordDTO.newPassword());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new DummyDTO("dummy"));
     }
 
     @PostMapping(path="/users/follows/follow/{username}", produces = "application/json")

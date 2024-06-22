@@ -25,6 +25,10 @@ public class WordService {
         this.reportRepository = reportRepository;
     }
 
+    public long count() {
+        return wordRepository.count();
+    }
+
     public List<Word> getAllWords() {
         return wordRepository.getAll();
     }

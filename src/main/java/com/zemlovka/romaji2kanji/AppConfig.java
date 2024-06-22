@@ -1,18 +1,14 @@
 package com.zemlovka.romaji2kanji;
 
-import com.zemlovka.romaji2kanji.db.entity.User;
-import com.zemlovka.romaji2kanji.db.service.UserService;
 import com.zemlovka.romaji2kanji.db.service.WordService;
 import com.zemlovka.romaji2kanji.utils.WordSupplier;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.time.Instant;
 
@@ -32,7 +28,7 @@ public class AppConfig {
 
     @EventListener(ApplicationReadyEvent.class)
     public void populateWords() {
-        if (wordService.getRandomWords(true,true, 1).size() == 0)
+        if (wordService.count() == 0)
             wordService.insertWords(WordSupplier.getWordsPool());
     }
 

@@ -1,7 +1,7 @@
 meta {
   name: Edit word
   type: http
-  seq: 6
+  seq: 3
 }
 
 post {
@@ -10,9 +10,13 @@ post {
   auth: inherit
 }
 
+headers {
+  Origin: localhost:3000
+}
+
 body:json {
   {
-      "id": 491,
+      "id": 4,
       "english": "edited",
       "kana": "edited",
       "kanji": "edited",
