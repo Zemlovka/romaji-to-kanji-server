@@ -12,10 +12,10 @@ public record UserCompleteDTO(
         Instant updatedAt,
         List<WordDTO> createdWords,
         List<WordProgressDTO> wordProgresses,
-        List<ReportDTOOut> reports
+        List<ReportDTOOut> reports,
 //        List<AchievementProgress> achievementProgresses,
-//        List<Follow> followedUsers,
-//        List<Follow> followingUsers
+        List<FollowDTO> followers,
+        List<FollowDTO> followingUsers
 
 ) {
 

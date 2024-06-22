@@ -1,10 +1,8 @@
 package com.zemlovka.romaji2kanji.endpoints;
 
-import com.zemlovka.romaji2kanji.db.entity.Report;
-import com.zemlovka.romaji2kanji.db.entity.User;
-import com.zemlovka.romaji2kanji.db.entity.Word;
-import com.zemlovka.romaji2kanji.db.entity.WordProgress;
+import com.zemlovka.romaji2kanji.db.entity.*;
 import com.zemlovka.romaji2kanji.endpoints.dto.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -81,7 +79,19 @@ public class Mapper {
 
     public static UserCompleteDTO mapUserComplete(User user) {
         return new UserCompleteDTO(user.getId(), user.getUsername(), user.getRole().name(), user.getRegisteredAt(),
-                user.getUpdatedAt(), mapWord(user.getCreatedWords()),
-                mapWordProgress(user.getWordProgresses()), mapReport(user.getReports()));
+                user.getUpdatedAt(),
+                mapWord(user.getCreatedWords()),
+                mapWordProgress(user.getWordProgresses()),
+                mapReport(user.getReports()),
+                mapFollow(user.getFollowedUsers()),
+                mapFollow(user.getFollowingUsers()));
+    }
+
+    public static FollowDTO mapFollow(Follow follow) {
+        return new FollowDTO(follow.getFollowedUser().getUsername(), follow.getFollowingUser().getUsername(), follow.getCreatedAt());
+    }
+
+    public static List<FollowDTO> mapFollow(List<Follow> follows) {
+        return follows.stream().map(Mapper::mapFollow).toList();
     }
 }

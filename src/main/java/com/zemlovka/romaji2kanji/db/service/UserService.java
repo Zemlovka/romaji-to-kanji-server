@@ -1,7 +1,10 @@
 package com.zemlovka.romaji2kanji.db.service;
 
+import com.zemlovka.romaji2kanji.db.entity.Follow;
+import com.zemlovka.romaji2kanji.db.entity.FollowId;
 import com.zemlovka.romaji2kanji.db.entity.Role;
 import com.zemlovka.romaji2kanji.db.entity.User;
+import com.zemlovka.romaji2kanji.db.repository.FollowRepository;
 import com.zemlovka.romaji2kanji.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,12 +20,34 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, FollowRepository followRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.followRepository = followRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public Follow followUser(User following, String followedUsername) {
+        Follow follow = new Follow();
+        follow.setFollowedUser(loadUserByUsername(followedUsername));
+        follow.setFollowingUser(following);
+        follow.setCreatedAt(Instant.now());
+        return followRepository.save(follow);
+    }
+
+    public void unfollow(User unfollowing, String followedUsername) {
+        followRepository.deleteByFollowedUserAndFollowingUser(loadUserByUsername(followedUsername), unfollowing);
+    }
+
+    public List<Follow> getFollowing(User user) {
+        return followRepository.findAllByFollowingUser(user);
+    }
+
+    public List<Follow> getFollowers(User user) {
+        return followRepository.findAllByFollowedUser(user);
     }
 
     public List<User> getAllUsers() {

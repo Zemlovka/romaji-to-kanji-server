@@ -47,6 +47,26 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping(path="/users/follows/follow/{username}", produces = "application/json")
+    public ResponseEntity<FollowDTO> follow(@PathVariable String username, Authentication auth) {
+        return ResponseEntity.ok(Mapper.mapFollow(userService.followUser((User) auth.getPrincipal(), username)));
+    }
+
+    @PostMapping(path="/users/follows/unfollow/{username}", produces = "application/json")
+    public ResponseEntity<UnfollowDTO> unfollow(@PathVariable String username, Authentication auth) {
+        userService.unfollow((User) auth.getPrincipal(), username);
+        return ResponseEntity.ok(new UnfollowDTO("huj"));
+    }
+
+    @GetMapping(path="/users/follows/following", produces = "application/json")
+    public ResponseEntity<List<FollowDTO>> getFollowing(Authentication auth) {
+        return ResponseEntity.ok(Mapper.mapFollow(userService.getFollowing((User) auth.getPrincipal())));
+    }
+
+    @GetMapping(path="/users/follows/followers", produces = "application/json")
+    public ResponseEntity<List<FollowDTO>> getFollowers(Authentication auth) {
+        return ResponseEntity.ok(Mapper.mapFollow(userService.getFollowers((User) auth.getPrincipal())));
+    }
     @GetMapping(path="/users/{username}", produces = "application/json")
     public ResponseEntity<UserCompleteDTO> getUser(@PathVariable String username) {
         return ResponseEntity.ok(Mapper.mapUserComplete(userService.loadUserByUsername(username)));
