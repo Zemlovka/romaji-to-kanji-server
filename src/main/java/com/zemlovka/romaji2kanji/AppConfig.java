@@ -26,26 +26,12 @@ public class AppConfig {
         this.wordService = wordService;
     }
 
+    /**
+     * Populating the words db if empty
+     */
     @EventListener(ApplicationReadyEvent.class)
     public void populateWords() {
         if (wordService.count() == 0)
             wordService.insertWords(WordSupplier.getWordsPool());
     }
-
-//    @Bean
-//    public UserDetailsService users() {
-//        // The builder will ensure the passwords are encoded before saving in memory
-//        User.UserBuilder users = User.withDefaultPasswordEncoder();
-//        UserDetails user = users
-//                .username("user")
-//                .password("password")
-//                .roles("USER")
-//                .build();
-//        UserDetails admin = users
-//                .username("admin")
-//                .password("password")
-//                .roles("USER", "ADMIN")
-//                .build();
-//        return new InMemoryUserDetailsManager(user, admin);
-//    }
 }

@@ -83,15 +83,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void updateUser(UserDetails user) {
-//        User userEntity = new User();
-//        userEntity.setUsername(user.getUsername());
-//        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
-//        //todo
-//        userEntity.setRole(Role.ROLE_USER);
-//        userEntity.setUpdatedAt(Instant.now());
-//        userRepository.save(userEntity);
-    }
 
     public User updateUserRole(String username, Role role) {
         User user = userRepository.findUserByUsername(username). orElseThrow(() -> new UsernameNotFoundException("User not found"));

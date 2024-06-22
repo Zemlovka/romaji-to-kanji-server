@@ -4,6 +4,7 @@ import com.zemlovka.romaji2kanji.db.entity.Role;
 import com.zemlovka.romaji2kanji.db.entity.User;
 import com.zemlovka.romaji2kanji.db.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
@@ -44,26 +45,44 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Value("${r2k.default.user.username}")
+    private String userUsername;
+
+    @Value("${r2k.default.user.password}")
+    private String userPassword;
+
+    @Value("${r2k.default.admin.username}")
+    private String adminUsername;
+
+    @Value("${r2k.default.admin.password}")
+    private String adminPassword;
+
+    /**
+     * Initializing default users
+     */
     @EventListener(ApplicationReadyEvent.class)
     public void initDefaultUser() {
-        if (!userService.userExists("user")) {
+        if (!userService.userExists(userUsername)) {
             User user = new User();
-            user.setUsername("user");
-            user.setPassword("password");
+            user.setUsername(userUsername);
+            user.setPassword(userPassword);
             user.setRole(Role.ROLE_USER);
             user.setRegisteredAt(Instant.now());
             userService.createUser(user);
         }
-        if (!userService.userExists("admin")) {
+        if (!userService.userExists(adminUsername)) {
             User admin = new User();
-            admin.setUsername("admin");
-            admin.setPassword("password");
+            admin.setUsername(adminUsername);
+            admin.setPassword(adminPassword);
             admin.setRole(Role.ROLE_ADMIN);
             admin.setRegisteredAt(Instant.now());
             userService.createUser(admin);
         }
     }
 
+    /**
+     * Filter chain separating admin panel from the rest of the site
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
@@ -71,21 +90,24 @@ public class SecurityConfig {
         http
         .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
-//        http.securityMatcher("/admin-page","/index","/contact","/register*");
         http.authorizeHttpRequests(
             (authorize) -> authorize
                 .requestMatchers("/users/register").permitAll()
                 .requestMatchers(HttpMethod.GET, "/words").permitAll()
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-//                                .requestMatchers("/index").hasAnyRole("USER","ADMIN")
-//                                .requestMatchers("/contact").permitAll()
-//                .requestMatchers("/users/**").permitAll()
                 .anyRequest().authenticated())
 
                 .httpBasic(httpSec -> httpSec.authenticationEntryPoint(unauthorizedEntrypoint)).userDetailsService(userAuthService);
+        http.logout()
+                .logoutUrl("/logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
         return http.build();
     }
 
+    /**
+     * Cors cfg
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -99,53 +121,4 @@ public class SecurityConfig {
         return source;
     }
 
-//    @Bean
-//    public DataSource dataSource() {
-//        return new EmbeddedDatabaseBuilder()
-//                .setType(EmbeddedDatabaseType.H2)
-//                .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
-//                .build();
-//    }
-
-//    @Bean
-//    public UserDetailsManager users(DataSource dataSource) {
-//        UserDetails user = User.withDefaultPasswordEncoder()
-//                .username("user")
-//                .password("password")
-//                .roles("USER")
-//                .build();
-//        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-//        users.createUser(user);
-//        return users;
-//    }
-
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .userDetailsService(userService)
-//                .passwordEncoder(encoder);
-//    }
-//
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .mvcMatchers("/api/**", "/auth/**").authenticated()
-//                .mvcMatchers("/api/register", "/**").permitAll()
-//                .and()
-//                .csrf().disable()
-//                .httpBasic()
-//                .and()
-//                .formLogin()
-//                .loginPage("/login").permitAll()
-////                .loginProcessingUrl("/login")
-////                .defaultSuccessUrl("/homepage.html", true)
-////                .failureUrl("/login.html?error=true")
-////                .failureHandler(authenticationFailureHandler())
-////                .and()
-////                .logout()
-////                .logoutUrl("/perform_logout")
-////                .deleteCookies("JSESSIONID")
-////                .logoutSuccessHandler(logoutSuccessHandler())
-//        ;
-//    }
 }
