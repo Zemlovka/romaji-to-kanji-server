@@ -35,6 +35,7 @@ public class WordSupplier {
         word.setIsKatakana(wordJson.jp.isKatakana);
         word.setKanji(wordJson.jp.kj);
         word.setCreatedAt(Instant.now());
+        word.setUpdatedAt(Instant.now());
         return word;
     }
 
