@@ -48,8 +48,8 @@ public class UserController {
     }
 
     @GetMapping(path="/users/{username}", produces = "application/json")
-    public ResponseEntity<UserDTO> register(@PathVariable String username) {
-        return ResponseEntity.ok().body(Mapper.mapUser(userService.loadUserByUsername(username)));
+    public ResponseEntity<UserCompleteDTO> getUser(@PathVariable String username) {
+        return ResponseEntity.ok(Mapper.mapUserComplete(userService.loadUserByUsername(username)));
     }
 
     @GetMapping(path="/users/{username}/words", produces = "application/json")
