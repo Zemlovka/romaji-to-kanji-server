@@ -50,7 +50,7 @@ public class AdminController {
 
     @PostMapping(path = "/reports/edit", consumes = "application/json", produces = "application/json")
     public ResponseEntity<ReportDTOOut> updateReport(@RequestBody ReportEditDTOIn reportDTOIn) {
-        Report report = wordService.updateReport(reportDTOIn.reportId(), reportDTOIn.state(), reportDTOIn.notes());
+        Report report = wordService.updateReport(reportDTOIn.id(), reportDTOIn.state(), reportDTOIn.notes());
         return ResponseEntity.ok().body(Mapper.mapReport(report));
     }
 

@@ -7,7 +7,7 @@ import java.time.Instant;
 
 
 public record ReportDTOOut(
-        Integer reportId,
+        Integer id,
         Integer reportedWordId,
         String reportedWord,
         String inputValue,

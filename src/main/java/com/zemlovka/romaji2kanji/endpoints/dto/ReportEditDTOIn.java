@@ -4,7 +4,7 @@ import com.zemlovka.romaji2kanji.db.entity.ReportState;
 
 
 public record ReportEditDTOIn(
-        Integer reportId,
+        Integer id,
         ReportState state,
         String notes
 
